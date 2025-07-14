@@ -103,3 +103,42 @@ for (let i = 1; i <= 100; i++) {
 
   cellSection.append(rowDiv);
 }
+
+// Export to CSV functionality
+const exportCsvBtn = document.getElementById('export-csv-btn');
+exportCsvBtn.addEventListener('click', function () {
+    // Get all rows and columns
+    const numRows = 100;
+    const numCols = 26;
+    let csvRows = [];
+    // First row: column headers (A,B,C,...)
+    let header = [];
+    for (let j = 0; j < numCols; j++) {
+        header.push(String.fromCharCode(65 + j));
+    }
+    csvRows.push(header.join(","));
+    // Data rows
+    for (let i = 1; i <= numRows; i++) {
+        let row = [];
+        for (let j = 0; j < numCols; j++) {
+            let cellAddress = String.fromCharCode(65 + j) + i;
+            let cellValue = dataObj[cellAddress]?.value || "";
+            // Escape quotes and commas
+            cellValue = String(cellValue).replace(/"/g, '""');
+            if (cellValue.includes(',') || cellValue.includes('"') || cellValue.includes('\n')) {
+                cellValue = '"' + cellValue + '"';
+            }
+            row.push(cellValue);
+        }
+        csvRows.push(row.join(","));
+    }
+    let csvContent = '\uFEFF' + csvRows.join("\r\n"); // Add BOM and use CRLF for compatibility
+    // Download
+    let blob = new Blob([csvContent], { type: 'text/csv' });
+    let a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'sheet.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+});
