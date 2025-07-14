@@ -150,3 +150,18 @@ body {
 .row{
   display: flex;
 }
+
+.export-csv-btn {
+  margin-left: 20px;
+  padding: 6px 18px;
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.export-csv-btn:hover {
+  background-color: #219150;
+}
